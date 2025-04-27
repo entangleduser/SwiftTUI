@@ -13,6 +13,7 @@ class Control: LayerDrawing {
 
     var root: Control { parent?.root ?? self }
 
+ 
     func addSubview(_ view: Control, at index: Int) {
         self.children.insert(view, at: index)
         layer.addLayer(view.layer, at: index)
@@ -29,6 +30,7 @@ class Control: LayerDrawing {
         }
     }
 
+ 
     func removeSubview(at index: Int) {
         if children[index].isFirstResponder || root.window?.firstResponder?.isDescendant(of: children[index]) == true {
             root.window?.firstResponder?.resignFirstResponder()
@@ -61,7 +63,8 @@ class Control: LayerDrawing {
         proposedSize
     }
 
-    func layout(size: Size) {
+ 
+func layout(size: Size) {
         layer.frame.size = size
     }
 
@@ -83,17 +86,19 @@ class Control: LayerDrawing {
 
     // MARK: - Event handling
 
-    func handleEvent(_ char: Character) {
+ 
+func handleEvent(_ char: Character) {
         for subview in children {
             subview.handleEvent(char)
         }
     }
-
+ 
     func becomeFirstResponder() {
         scroll(to: .zero)
     }
 
-    func resignFirstResponder() {}
+ 
+func resignFirstResponder() {}
 
     var isFirstResponder: Bool { root.window?.firstResponder === self }
 
@@ -116,7 +121,8 @@ class Control: LayerDrawing {
 
     // MARK: - Scrolling
 
-    func scroll(to position: Position) {
+ 
+func scroll(to position: Position) {
         parent?.scroll(to: position + layer.frame.position)
     }
 

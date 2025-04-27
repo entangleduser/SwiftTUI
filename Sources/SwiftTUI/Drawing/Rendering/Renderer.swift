@@ -18,15 +18,17 @@ class Renderer {
 
     private var currentAttributes = CellAttributes()
 
-    weak var application: Application?
+ weak var application: Application?
 
-    init(layer: Layer) {
+ 
+init(layer: Layer) {
         self.layer = layer
         setCache()
         setup()
     }
 
-    /// Draw only the invalidated part of the layer.
+ 
+/// Draw only the invalidated part of the layer.
     func update() {
         if let invalidated = layer.invalidated {
             draw(rect: invalidated)
@@ -34,11 +36,13 @@ class Renderer {
         }
     }
 
-    func setCache() {
+ 
+func setCache() {
         cache = .init(repeating: .init(repeating: nil, count: layer.frame.size.width.intValue), count: layer.frame.size.height.intValue)
     }
 
-    /// Draw a specific area, or the entire layer if the area is nil.
+ 
+/// Draw a specific area, or the entire layer if the area is nil.
     func draw(rect: Rect? = nil) {
         if rect == nil { layer.invalidated = nil }
         let rect = rect ?? Rect(position: .zero, size: layer.frame.size)
@@ -56,12 +60,14 @@ class Renderer {
         }
     }
 
-    func stop() {
+ 
+func stop() {
         write(EscapeSequence.disableAlternateBuffer)
         write(EscapeSequence.showCursor)
     }
 
-    private func drawPixel(_ cell: Cell, at position: Position) {
+ 
+private func drawPixel(_ cell: Cell, at position: Position) {
         guard position.column >= 0, position.line >= 0, position.column < layer.frame.size.width, position.line < layer.frame.size.height else {
             return
         }
@@ -98,6 +104,11 @@ class Renderer {
             if attributes.bold { write(EscapeSequence.enableBold) }
             else { write(EscapeSequence.disableBold) }
         }
+     
+     if currentAttributes.dim != attributes.dim {
+         if attributes.dim { write(EscapeSequence.enableDim) }
+         else { write(EscapeSequence.disableDim) }
+     }
         if currentAttributes.italic != attributes.italic {
             if attributes.italic { write(EscapeSequence.enableItalic) }
             else { write(EscapeSequence.disableItalic) }

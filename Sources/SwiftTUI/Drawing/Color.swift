@@ -23,7 +23,13 @@ public struct Color: Hashable {
     static func ansi(_ color: ANSIColor) -> Color {
         Color(data: .ansi(color))
     }
+ public static func white(_ offset: Int) -> Self {
+  Color(data: .xterm(.white(offset)))
+ }
 
+  public static func white(_ scale: Double) -> Self {
+   Color(data: .xterm(.white(scale)))
+  }
     /// A low-resolution color from a 6 by 6 by 6 color cube. The red, green and blue components
     /// must be numbers between 0 and 5.
     public static func xterm(red: Int, green: Int, blue: Int) -> Color {
@@ -34,7 +40,11 @@ public struct Color: Hashable {
     public static func xterm(white: Int) -> Color {
         Color(data: .xterm(.grayscale(white: white)))
     }
+ public static func xterm(white: Double) -> Color {
+     Color(data: .xterm(.grayscale(white: Int(23.0 * white))))
+ }
 
+ 
     /// A 24-bit color value. The red, green and blue components must be numbers between 0 and 255.
     /// Not all terminals support this.
     public static func trueColor(red: Int, green: Int, blue: Int) -> Color {
@@ -129,6 +139,15 @@ struct XTermColor: Hashable {
         let offset = 16 + (6 * 6 * 6)
         return XTermColor(value: offset + white)
     }
+ // 0 - 23
+ static func white(_ offset: Int) -> Self {
+  precondition(offset >= 0 && offset < 24, "White offset must lie between 0 and 24")
+  return Self(value: 232 + offset)
+ }
+ // 0.0 - 1.0
+ static func white(_ scale: Double) -> Self {
+  return .white(Int(23.0 * scale))
+}
 }
 
 struct TrueColor: Hashable {

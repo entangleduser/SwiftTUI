@@ -16,6 +16,7 @@ public struct State<T>: AnyState {
     /// a reference to state stored in a Node.
     var valueReference = StateReference()
 
+    
     public var wrappedValue: T {
         get {
             guard let node = valueReference.node,
@@ -41,6 +42,7 @@ public struct State<T>: AnyState {
         }
     }
 
+    
     public var projectedValue: Binding<T> {
         // Note: this works, but it is not as efficient as in SwiftUI.
         // In SwiftUI, Bindings can actively observe state. If you have a

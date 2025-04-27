@@ -1,12 +1,12 @@
 import Foundation
 
 public extension View {
-    func border(_ color: Color? = nil, style: BorderStyle = .default) -> some View {
-        return Border(content: self, color: color, style: style)
+ func border(_ color: Color? = nil, style: BorderStyle = .default, dim: Bool = false) -> some View {
+  return Border(content: self, color: color, style: style, dim: dim)
     }
   
-    func border(_ style: BorderStyle = .default) -> some View {
-        Border(content: self, color: nil, style: style)
+ func border(_ style: BorderStyle = .default, dim: Bool = false) -> some View {
+     Border(content: self, color: nil, style: style, dim: dim)
     }
 }
 
@@ -79,6 +79,7 @@ private struct Border<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
     let color: Color?
     let style: BorderStyle
+    let dim: Bool
     @Environment(\.foregroundColor) var foregroundColor: Color
     
     static var size: Int? { Content.size }
@@ -105,7 +106,7 @@ private struct Border<Content: View>: View, PrimitiveView, ModifierView {
     
     func passControl(_ control: Control, node: Node) -> Control {
         if let borderControl = control.parent { return borderControl }
-        let borderControl = BorderControl(color: color ?? foregroundColor, style: style)
+     let borderControl = BorderControl(color: color ?? foregroundColor, style: style, dim: dim)
         borderControl.addSubview(control, at: 0)
         node.controls?.add(borderControl)
         return borderControl
@@ -114,10 +115,14 @@ private struct Border<Content: View>: View, PrimitiveView, ModifierView {
     private class BorderControl: Control {
         var color: Color
         var style: BorderStyle
+        var dim: Bool
 
-        init(color: Color, style: BorderStyle) {
+        lazy var attributes = CellAttributes(dim: dim)
+
+        init(color: Color, style: BorderStyle, dim: Bool) {
             self.color = color
             self.style = style
+            self.dim = dim
         }
         
         override func size(proposedSize: Size) -> Size {
@@ -162,7 +167,10 @@ private struct Border<Content: View>: View, PrimitiveView, ModifierView {
             } else if position.column == layer.frame.size.width - 1 {
                 char = style.right
             }
-            return char.map { Cell(char: $0, foregroundColor: color) }
+         return char
+          .map {
+           Cell(char: $0, foregroundColor: color, attributes: attributes)
+          }
         }
     }
 }

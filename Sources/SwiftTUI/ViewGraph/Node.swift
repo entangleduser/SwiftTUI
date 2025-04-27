@@ -24,7 +24,7 @@ final class Node {
     #endif
 
     var control: Control?
-    weak var application: Application?
+ weak var application: Application?
 
     /// For modifiers only, references to the controls
     var controls: WeakSet<Control>?
@@ -40,7 +40,8 @@ final class Node {
         self.view = view
     }
 
-    func update(using view: GenericView) {
+ 
+@MainActor func update(using view: GenericView) {
         build()
         view.updateNode(self)
     }
@@ -63,6 +64,7 @@ final class Node {
         }
         return offset
     }
+ 
 
     func build() {
         if !built {
@@ -76,6 +78,7 @@ final class Node {
 
     // MARK: - Changing nodes
 
+ 
     func addNode(at index: Int, _ node: Node) {
         guard node.parent == nil else { fatalError("Node is already in tree") }
         children.insert(node, at: index)
@@ -90,6 +93,7 @@ final class Node {
         }
     }
 
+ 
     func removeNode(at index: Int) {
         if built {
             for i in (0 ..< children[index].size).reversed() {
@@ -105,6 +109,7 @@ final class Node {
 
     // MARK: - Container data source
 
+ 
     func control(at offset: Int) -> Control {
         build()
         if offset == 0, let control = self.control { return control }
@@ -125,6 +130,7 @@ final class Node {
 
     // MARK: - Container changes
 
+ 
     private func insertControl(at offset: Int) {
         if !(view is OptionalView), let container = view as? LayoutRootView {
             container.insertControl(at: offset, node: self)
@@ -133,6 +139,7 @@ final class Node {
         parent?.insertControl(at: offset + self.offset)
     }
 
+ 
     private func removeControl(at offset: Int) {
         if !(view is OptionalView), let container = view as? LayoutRootView {
             container.removeControl(at: offset, node: self)

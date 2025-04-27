@@ -10,6 +10,7 @@ class Layer {
 
     weak var renderer: Renderer?
 
+ 
     var frame: Rect = .zero {
         didSet {
             if oldValue != frame {
@@ -29,10 +30,12 @@ class Layer {
         self.children.remove(at: index)
     }
 
+ 
     func invalidate() {
         invalidate(rect: Rect(position: .zero, size: frame.size))
     }
 
+ 
     /// This recursively invalidates the same rect in the parent, in the
     /// parent's coordinate system.
     /// If the parent is the root layer, it sets the `invalidated` rect instead.
@@ -41,7 +44,7 @@ class Layer {
             parent.invalidate(rect: Rect(position: rect.position + frame.position, size: rect.size))
             return
         }
-        renderer?.application?.scheduleUpdate()
+      renderer?.application?.scheduleUpdate()
         guard let invalidated = self.invalidated else {
             self.invalidated = rect
             return
@@ -49,6 +52,7 @@ class Layer {
         self.invalidated = rect.union(invalidated)
     }
 
+ 
     func cell(at position: Position) -> Cell? {
         var char: Cell? = nil
 

@@ -6,6 +6,7 @@ extension AttributeScopes {
         public let backgroundColor = BackgroundColorAttribute()
         public let foregroundColor = ForegroundColorAttribute()
         public let bold = BoldAttribute()
+        public let dim = DimAttribute()
         public let italic = ItalicAttribute()
         public let strikethrough = StrikethroughAttribute()
         public let underline = UnderlineAttribute()
@@ -29,6 +30,11 @@ extension AttributeScopes.SwiftTUIAttributes {
         public typealias Value = Bool
         public static let name = "Bold"
     }
+ 
+ public struct DimAttribute: AttributedStringKey {
+     public typealias Value = Bool
+     public static let name = "Dim"
+ }
 
     public struct ItalicAttribute: AttributedStringKey {
         public typealias Value = Bool

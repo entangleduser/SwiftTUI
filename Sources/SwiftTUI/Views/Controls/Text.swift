@@ -10,10 +10,12 @@ public struct Text: View, PrimitiveView {
     
     @Environment(\.foregroundColor) private var foregroundColor: Color
     @Environment(\.bold) private var bold: Bool
+    @Environment(\.dim) private var dim: Bool
     @Environment(\.italic) private var italic: Bool
     @Environment(\.underline) private var underline: Bool
     @Environment(\.strikethrough) private var strikethrough: Bool
-    
+    @Environment(\.inverted) private var inverted: Bool
+
     public init(_ text: String) {
         self.text = text
     }
@@ -32,9 +34,11 @@ public struct Text: View, PrimitiveView {
             attributedText: _attributedText,
             foregroundColor: foregroundColor,
             bold: bold,
+            dim: dim,
             italic: italic,
             underline: underline,
-            strikethrough: strikethrough
+            strikethrough: strikethrough,
+            inverted: inverted
         )
     }
     
@@ -46,9 +50,11 @@ public struct Text: View, PrimitiveView {
         control._attributedText = _attributedText
         control.foregroundColor = foregroundColor
         control.bold = bold
+        control.dim = dim
         control.italic = italic
         control.underline = underline
         control.strikethrough = strikethrough
+        control.inverted = inverted
         control.layer.invalidate()
     }
     
@@ -62,26 +68,32 @@ public struct Text: View, PrimitiveView {
         
         var foregroundColor: Color
         var bold: Bool
+        var dim: Bool
         var italic: Bool
         var underline: Bool
         var strikethrough: Bool
+        var inverted: Bool
         
         init(
             text: String?,
             attributedText: Any?,
             foregroundColor: Color,
             bold: Bool,
+            dim: Bool,
             italic: Bool,
             underline: Bool,
-            strikethrough: Bool
+            strikethrough: Bool,
+            inverted: Bool
         ) {
             self.text = text
             self._attributedText = attributedText
             self.foregroundColor = foregroundColor
             self.bold = bold
+            self.dim = dim
             self.italic = italic
             self.underline = underline
             self.strikethrough = strikethrough
+            self.inverted = inverted
         }
         
         override func size(proposedSize: Size) -> Size {
@@ -97,6 +109,7 @@ public struct Text: View, PrimitiveView {
                 let char = attributedText[i ..< characters.index(after: i)]
                 let cellAttributes = CellAttributes(
                     bold: char.bold ?? bold,
+                    dim: char.dim ?? dim,
                     italic: char.italic ?? italic,
                     underline: char.underline ?? underline,
                     strikethrough: char.strikethrough ?? strikethrough,
@@ -112,9 +125,11 @@ public struct Text: View, PrimitiveView {
             if let text {
                 let cellAttributes = CellAttributes(
                     bold: bold,
+                    dim: dim,
                     italic: italic,
                     underline: underline,
-                    strikethrough: strikethrough
+                    strikethrough: strikethrough,
+                    inverted: inverted
                 )
                 return Cell(
                     char: text[text.index(text.startIndex, offsetBy: position.column.intValue)],

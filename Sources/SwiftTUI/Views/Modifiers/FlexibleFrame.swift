@@ -12,6 +12,16 @@ public extension View {
     ) -> some View {
         FlexibleFrame(content: self, minWidth: minWidth, maxWidth: maxWidth, minHeight: minHeight, maxHeight: maxHeight, alignment: alignment)
     }
+ 
+ func frame(
+     minWidth: Int? = nil,
+     maxWidth: Int? = nil,
+     minHeight: Int? = nil,
+     maxHeight: Int? = nil,
+     alignment: Alignment = .center
+ ) -> some View {
+     FlexibleFrame(content: self, minWidth: minWidth, maxWidth: maxWidth, minHeight: minHeight, maxHeight: maxHeight, alignment: alignment)
+ }
 }
 
 private struct FlexibleFrame<Content: View>: View, PrimitiveView, ModifierView {
@@ -95,3 +105,31 @@ private struct FlexibleFrame<Content: View>: View, PrimitiveView, ModifierView {
         }
     }
 }
+
+extension FlexibleFrame {
+ internal init(content: Content, minWidth: Int? = nil, maxWidth: Int? = nil, minHeight: Int? = nil, maxHeight: Int? = nil, alignment: Alignment) {
+  self.content = content
+  if let minWidth {
+   self.minWidth = Extended(minWidth)
+  } else {
+   self.minWidth = nil
+  }
+  if let maxWidth {
+   self.maxWidth = Extended(maxWidth)
+  } else {
+   self.maxWidth = nil
+  }
+  if let minHeight {
+   self.minHeight = Extended(minHeight)
+  } else {
+   self.minHeight = nil
+  }
+  if let maxHeight {
+   self.maxHeight = Extended(maxHeight)
+  } else {
+   self.maxHeight = nil
+  }
+  self.alignment = alignment
+ }
+}
+
