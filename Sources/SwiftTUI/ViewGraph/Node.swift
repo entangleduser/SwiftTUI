@@ -1,6 +1,11 @@
 import Foundation
-#if os(macOS)
+
+#if canImport(Combine) || canImport(OpenCombine)
+#if canImport(Combine)
 import Combine
+#else
+import OpenCombine
+#endif
 #endif
 
 /// The node of a view graph.
@@ -19,7 +24,7 @@ final class Node {
 
     var state: [String: Any] = [:]
     var environment: ((inout EnvironmentValues) -> Void)?
-    #if os(macOS)
+    #if canImport(Combine) || canImport(OpenCombine)
     var subscriptions: [String: AnyCancellable] = [:]
     #endif
 

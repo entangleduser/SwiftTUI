@@ -7,7 +7,7 @@ struct ComposedView<I: View>: GenericView {
 func buildNode(_ node: Node) {
         view.setupStateProperties(node: node)
         view.setupEnvironmentProperties(node: node)
-        #if os(macOS)
+        #if canImport(Combine) || canImport(OpenCombine)
         view.setupObservedObjectProperties(node: node)
         #endif
         node.addNode(at: 0, Node(view: view.body.view))

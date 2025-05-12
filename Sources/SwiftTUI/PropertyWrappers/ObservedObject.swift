@@ -1,6 +1,10 @@
-#if os(macOS)
+#if canImport(Combine) || canImport(OpenCombine)
 import Foundation
+#if canImport(Combine)
 import Combine
+#else
+@_exported import OpenCombine
+#endif
 
 @propertyWrapper
 public struct ObservedObject<T: ObservableObject>: AnyObservedObject {
